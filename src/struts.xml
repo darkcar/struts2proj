@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+	
+<struts>
+	<!-- <constant name="struts.devMode" value="true" /> -->
+	<package name="p1" extends="struts-default">
+		<action name="hello" class="com.frank.web.struts.HelloAction" method="sayHello">
+			<result name="success" type="dispatcher">/success.jsp</result>
+		</action>
+	</package>
+	
+	<!-- <package name="user" extends="struts-default">
+		<action name="addUser" class="com.frank.web.user.UserManagementAction" method="addUser">
+			<result name="success" type="dispatcher">/success.jsp</result>
+		</action>
+		<action name="updateUser" class="com.frank.web.user.UserManagementAction" method="updateUser">
+			<result name="success" type="dispatcher">/success.jsp</result>
+		</action>
+	</package> -->
+	<!-- <package name="user" extends="struts-default">
+	
+	<action name="*" class="com.frank.web.user.UserManagementAction" method="{1}">
+		<result name="success" type="dispatcher">/success.jsp</result>
+	</action>
+</package> -->
+	<constant name="struts.enable.DynamicMethodInvocation" value="true" />
+	<package name="user" extends="struts-default">
+		<action name="*_*" class="com.frank.web.user.UserManagementAction" method="{1}{2}">
+			<result name="success" type="dispatcher">/success.jsp</result>
+		</action>
+	</package>
+</struts>
