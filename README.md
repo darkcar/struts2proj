@@ -16,7 +16,8 @@ Apache Struts is a free, open-source, MVC framework for creating elegant, modern
   - `asm-tree.jar`
   - `commons-fileupload.jar`
   - `commons-io.jar`
-  - `commons-lang.jar`
+  - `commons-lang-2.4.jar`
+  - `commons-lang3-3.2.jar`
   - `freemarker.jar`
   - `javassist.jar`
   - `log4j-api.jar`
@@ -89,9 +90,13 @@ Apache Struts is a free, open-source, MVC framework for creating elegant, modern
 
 - And last step visit the action URI `hello`
 
+<strong>Note:</strong> Please use the project name `struts2_boilderplate`.
+
 ### 1.2 Use Struts2 + Hibernate to implement customer list query. 
 
-Step by step
+#### 1.2.1 Hibernate 
+
+Hibernate is an Object/Relational Mapping(ORM) solution for Java environments. Here ORM refers to the technique of mapping data between an object model representation to a relational data model representation. 
 
 ## Section 2. Struts2 Request Parameters
 
@@ -105,7 +110,13 @@ Step by step
 
 - ServletContext
 
-### 2.2 Struts2 Provided Way
+### 2.2 Struts2 Request parameters
+
+
+
+### 2.3 Use Struts2 Save Customer
+
+
 
 ## Section 3. OGNL Expression and OGNL Context
 
