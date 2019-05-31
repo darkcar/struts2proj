@@ -23,5 +23,18 @@ class CustomerDaoTest {
 			System.out.println(customer);
 		}
 	}
+	
+	@Test
+	void testSaveCustomer() {
+		Customer customer = new Customer();
+		customer.setCustName("Frank Wang");
+		customer.setCustIndustry("Government");
+		customer.setCustLevel("7");
+		customer.setCustPhone("1-306-2920123");
+		customer.setCustSource("3");
+		customer.setCustAddress("110 Regina, SK");
+		ICustomerService customerService = new CustomerServiceImpl();
+		customerService.saveCustomer(customer);
+	}
 
 }

@@ -16,4 +16,11 @@ public interface ICustomerService {
 	 * @return
 	 */
 	List<Customer> findAllCustomer();
+
+	/**
+	 * Save Customer
+	 * @param customer
+	 */
+	void saveCustomer(Customer customer);
+
 }

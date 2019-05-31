@@ -6,13 +6,13 @@
 <hibernate-configuration>
 	<session-factory>
 		<!-- Part 1 DB Info -->
-		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost:8889/crm_struts2</property>
 		<property name="hibernate.connection.username">root</property>
 		<property name="hibernate.connection.password">root123</property>
 		
 		<!-- Part 2: Hibernate Information (Optional) -->
-		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.format_sql">true</property>
 		<!-- 
 			Hibernate Create table, after we configure the settings
@@ -23,7 +23,7 @@
 			db Dialect
 		 -->
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-			
+		<property name="connection.autocommit">true</property>
 		<!-- Part 3: Including mapping xml -->
 		<mapping class="com.frank.domain.Customer" />
 	</session-factory>

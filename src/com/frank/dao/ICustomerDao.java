@@ -15,5 +15,11 @@ public interface ICustomerDao {
 	 * @return
 	 */
 	List<Customer> findAllCustomer();
+	
+	/**
+	 * Save Customer in Dao
+	 * @param customer
+	 */
+	void saveCustomer(Customer customer);
 
 }

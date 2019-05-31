@@ -4,9 +4,9 @@
 
 - 表现层：接收和处理请求
           		MVC模型，表现层模型
-    				M：模型：封装数据           实体类作为模型
-    				V：视图：展示数据           JSP/HTML
-    				C：控制器 控制程序流转的。   Servlet/Filter
+        				M：模型：封装数据           实体类作为模型
+        				V：视图：展示数据           JSP/HTML
+        				C：控制器 控制程序流转的。   Servlet/Filter
 - 业务层：处理程序业务需求
 - 持久层：对数据库操作的。
 
@@ -255,5 +255,309 @@ Action先找局部结果，然后再找全局结果。 如何配置父包的继�
   使用response：需要实现`ServletResponseAware`
 
   使用servletContext：需要实现`ServletContextAware`
+  
+  ```xml
+  默认的拦截器：
+  <interceptor-stack name="basicStack">
+  	<interceptor-ref name="exception"/>
+  	<interceptor-ref name="servletConfig"/>
+  	<interceptor-ref name="prepare"/>
+  	<interceptor-ref name="checkbox"/>
+  	<interceptor-ref name="datetime"/>
+  	<interceptor-ref name="multiselect"/>
+  	<interceptor-ref name="actionMappingParams"/>
+  	<interceptor-ref name="params"/>
+  	<interceptor-ref name="conversionError"/>
+  	<interceptor-ref name="deprecation"/>
+  </interceptor-stack>
+  ```
+  
+  起作用的拦截器就是`servletConfig`. 如果注释一下这个拦截器，就会造成获取不了servletConfig这个对象。
+  
+- 也可以有三种方式：使用`ActionContext`中的get(key)方法。
 
-08访问servletAPI的第二种方式
+## 8. 请求参数封装
+
+1. 动作类和表单数据放在一起的情况。
+
+   要求：表单元素的name属性取值，必须和动作类中成员get/set方法后面的部分保持一致。
+
+   应用场景：不需要数据库，分页情况下
+
+   ```java
+   public class DemoAction extends ActionSupport {
+   	
+   	private String username;
+   	private Integer age;
+   	private Date birth;
+   	private String hobby;
+   	
+   	public String demo1() {
+   		System.out.println(username + "====" + age + "=====" + birth + "=====" + hobby);
+   		return SUCCESS;
+   	}
+   	
+   	public String getUsername() {
+   		return username;
+   	}
+   
+   	public void setUsername(String username) {
+   		this.username = username;
+   	}
+   	public Integer getAge() {
+   		return age;
+   	}
+   	public void setAge(Integer age) {
+   		this.age = age;
+   	}
+   	public Date getBirth() {
+   		return birth;
+   	}
+   
+   	public void setBirth(Date birth) {
+   		this.birth = birth;
+   	}
+   	public String getHobby() {
+   		return hobby;
+   	}
+   	public void setHobby(String hobby) {
+   		this.hobby = hobby;
+   	}
+   }	
+   
+   ```
+
+   表单form：
+
+   ```html
+   <form action="${pageContext.request.contextPath }/request_uri" method="post">
+   	Name: <input type="text" name="username"/> <br>
+   	Age: <input type="text" name="age"/> <br/>
+   	Birth: <input type="text" name="birth"/> <br/>
+   	Hobby: <input type="checkbox" name="hobby" value="swimming" /> Swimming
+   		<input type="checkbox" name="hobby" value="coding" /> Coding
+   		<input type="checkbox" name="hobby" value="eating"/> Eating<br>
+   	<input type="submit" value="Submit"/>
+   </form> 
+   ```
+
+   <strong>请求参数的一些细节：</strong>
+
+   - struts2框架会自动为我们转换数据类型，基本的数据类型，字符串数组会按照逗号+空格的形式拼接。日期类型会按照本地格式转换成日期对象。
+   - 执行的参数封装，是一个params的拦截器实现的。
+
+2. 有实体类的封装
+
+   想要封装成功需要使用OGNL表达式来制定表单元素的name去值。
+
+   OGNL：Object	Graph	Navigation	Language(对象图导航语言)
+
+   写法：`user.username` `user.age` ，下一步的流程就是在动作类中，找到对应的类。
+
+   + 创建一个实体类：
+
+     ```java
+     package com.frank.entity;
+     
+     import java.util.Date;
+     
+     public class User {
+     	private String username;
+     	private Integer age;
+     	private Date birth;
+     	private String hobby;
+     	public String getUsername() {
+     		return username;
+     	}
+     	public void setUsername(String username) {
+     		this.username = username;
+     	}
+     	public Integer getAge() {
+     		return age;
+     	}
+     	public void setAge(Integer age) {
+     		this.age = age;
+     	}
+     	public Date getBirth() {
+     		return birth;
+     	}
+     	public void setBirth(Date birth) {
+     		this.birth = birth;
+     	}
+     	public String getHobby() {
+     		return hobby;
+     	}
+     	public void setHobby(String hobby) {
+     		this.hobby = hobby;
+     	}
+     	@Override
+     	public String toString() {
+     		// TODO Auto-generated method stub
+     		return username + ", " + age + ", " + birth + ", " + hobby;
+     	}
+     }
+     
+     ```
+
+   + 创建动作类：
+
+     ```java
+     public class DemoAction extends ActionSupport {
+     	
+     	private User user;
+     	public User getUser() {
+     		return user;
+     	}
+     	public void setUser(User user) {
+     		this.user = user;
+     	}
+     	public String demo1() {
+     		System.out.println(user);
+     		return SUCCESS;
+     	}
+     }	
+     
+     ```
+
+   + 需要使用OGNL表达式更改表单元素
+
+     ```jsp
+     <form action="${pageContext.request.contextPath }/request_uri" method="post">
+     	Name: <input type="text" name="user.username"/> <br>
+     	Age: <input type="text" name="user.age"/> <br/>
+     	Birth: <input type="text" name="user.birth"/> <br/>
+     	Hobby: <input type="checkbox" name="user.hobby" value="swimming" /> Swimming
+     		<input type="checkbox" name="user.hobby" value="coding" /> Coding
+     		<input type="checkbox" name="user.hobby" value="eating"/> Eating<br>
+     	<input type="submit" value="Submit"/>
+     </form> 
+     ```
+
+3. 模型驱动:除了params拦截器之外，还需要一个叫modelDriven拦截器。(使用最多的一种方式)
+
+   - 动作类必须实现`ModelDriven`接口
+   - 动作类中需要定义模型，并且必须实例化出来
+   - 提供接口抽象的方法的实现，返回值必须调用set方法赋值。
+
+   ```java
+   public class DemoAction extends ActionSupport implements ModelDriven<User> {
+   
+   	private User user = new User();
+   
+   	public User getUser() {
+   		return user;
+   	}
+   
+   	public String demo1() {
+   		System.out.println(user);
+   		return SUCCESS;
+   	}
+   
+   	@Override
+   	public User getModel() {
+   		return user;
+   	}
+   }
+   
+   ```
+
+4. 复杂类型的封装：
+
+   - List集合的封装
+
+     ```jsp
+     <form action="${pageContext.request.contextPath }/request_uri" method="post">
+     	Name: <input type="text" name="users[0].username"/> <br>
+     	Age: <input type="text" name="users[0].age"/> <br/>
+     	Birth: <input type="text" name="users[0].birth"/> <br/>
+     	Hobby: <input type="checkbox" name="users[0].hobby" value="swimming" /> Swimming
+     		<input type="checkbox" name="users[0].hobby" value="coding" /> Coding
+     		<input type="checkbox" name="users[0].hobby" value="eating"/> Eating<br>
+     		
+     	Name: <input type="text" name="users[1].username"/> <br>
+     	Age: <input type="text" name="users[1].age"/> <br/>
+     	Birth: <input type="text" name="users[1].birth"/> <br/>
+     	Hobby: <input type="checkbox" name="users[1].hobby" value="swimming" /> Swimming
+     		<input type="checkbox" name="users[1].hobby" value="coding" /> Coding
+     		<input type="checkbox" name="users[1].hobby" value="eating"/> Eating<br>
+     		
+     	Name: <input type="text" name="users[2].username"/> <br>
+     	Age: <input type="text" name="users[2].age"/> <br/>
+     	Birth: <input type="text" name="users[2].birth"/> <br/>
+     	Hobby: <input type="checkbox" name="users[2].hobby" value="swimming" /> Swimming
+     		<input type="checkbox" name="users[2].hobby" value="coding" /> Coding
+     		<input type="checkbox" name="users[2].hobby" value="eating"/> Eating<br>
+     	<input type="submit" value="Submit"/>
+     </form> 
+     ```
+
+     ```java
+     public class DemoAction extends ActionSupport implements ModelDriven<List<User>> {
+     	
+     	private List<User> users = new ArrayList<User>();
+     	public List<User> getUsers() {
+     		return users;
+     	}
+     	
+     	public String demo1() {
+     		for(User user : users) {
+     			System.out.println(user);
+     		}
+     		return SUCCESS;
+     	}
+     
+     	@Override
+     	public List<User> getModel() {
+     		return users;
+     	}
+     }
+     ```
+
+   - Map集合的封装
+
+     ```jsp
+     <form action="${pageContext.request.contextPath }/request_uri" method="post">
+     	Name: <input type="text" name="users['key1'].username"/> <br>
+     	Age: <input type="text" name="users['key1'].age"/> <br/>
+     	Birth: <input type="text" name="users['key1'].birth"/> <br/>
+     	Hobby: <input type="checkbox" name="users['key1'].hobby" value="swimming" /> Swimming
+     		<input type="checkbox" name="users['key1'].hobby" value="coding" /> Coding
+     		<input type="checkbox" name="users['key1'].hobby" value="eating"/> Eating<br>
+     		
+     	Name: <input type="text" name="users['key2'].username"/> <br>
+     	Age: <input type="text" name="users['key2'].age"/> <br/>
+     	Birth: <input type="text" name="users['key2'].birth"/> <br/>
+     	Hobby: <input type="checkbox" name="users['key2'].hobby" value="swimming" /> Swimming
+     		<input type="checkbox" name="users['key2'].hobby" value="coding" /> Coding
+     		<input type="checkbox" name="users['key2'].hobby" value="eating"/> Eating<br>
+     		
+     	Name: <input type="text" name="users['key3'].username"/> <br>
+     	Age: <input type="text" name="users['key3'].age"/> <br/>
+     	Birth: <input type="text" name="users['key3'].birth"/> <br/>
+     	Hobby: <input type="checkbox" name="users['key3'].hobby" value="swimming" /> Swimming
+     		<input type="checkbox" name="users['key3'].hobby" value="coding" /> Coding
+     		<input type="checkbox" name="users['key3'].hobby" value="eating"/> Eating<br>
+     	<input type="submit" value="Submit"/>
+     </form>
+     ```
+
+     ```java
+     public class DemoAction extends ActionSupport {
+     	
+     	private Map<String, User> users = new HashMap<String, User>();
+     	public Map<String, User> getUsers() {
+     		return users;
+     	}
+     	
+     	
+     	public String demo1() {
+     		System.out.println(users.get("key1"));
+     		System.out.println(users.get("key2"));
+     		System.out.println(users.get("key3"));
+     		return SUCCESS;
+     	}
+     }
+     
+     ```
+
+     因为已经使用了OGNL表达式，所以不需要实现ModelDriven接口。 

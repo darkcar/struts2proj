@@ -11,7 +11,7 @@
         </ol>
 
         <!-- Page Content -->
-        <h1>All Customers</h1>
+        <h2>All Customers</h2>
         <hr>
         <!-- DataTables Example -->
         <div class="card mb-3">
