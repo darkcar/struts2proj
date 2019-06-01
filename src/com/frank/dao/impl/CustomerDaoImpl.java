@@ -18,4 +18,9 @@ public class CustomerDaoImpl implements ICustomerDao {
 	public List<Customer> findAllCustomer() {
 		return HibernateUtil.getSessionFactory().openSession().createQuery("from Customer").list() ;
 	}
+
+	@Override
+	public void saveCustomer(Customer customer) {
+		HibernateUtil.getSessionFactory().openSession().saveOrUpdate(customer);
+	}
 }

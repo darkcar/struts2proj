@@ -39,7 +39,32 @@ public class CustomerServiceImpl implements ICustomerService{
 			// Roll back 
 			transaction.rollback();
 			throw new RuntimeException(e);
+		} finally {
+			session.close();
 		}
 	}
+
+	@Override
+	public void saveCustomer(Customer customer) {
+		Session session = null;
+		Transaction transaction = null;
+		try {
+			// Get Session
+			session = HibernateUtil.getSessionFactory().openSession();
+			// Open Transaction 
+			transaction = session.beginTransaction();
+			// Execute Operation
+			customerDao.saveCustomer(customer);
+			// Commit Transaction
+			transaction.commit();
+		} catch (Exception e) {
+			// Roll back 
+			transaction.rollback();
+			throw new RuntimeException(e);
+		} finally {
+			session.close();
+		}
+	}
+
 	
 }

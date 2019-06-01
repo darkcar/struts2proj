@@ -11,5 +11,15 @@
 		<action name="findAllCustomer" class="com.frank.web.action.CustomerAction" method="findAllCustomer">
 			<result name="findAllCustomer">/WEB-INF/jsp/customer/list.jsp</result>
 		</action>
+		
+		<!-- Get Add customer Page -->
+		<action name="addUICustomer" class="com.frank.web.action.CustomerAction" method="addUICustomer">
+			<result name="addUICustomer">/WEB-INF/jsp/customer/add.jsp</result>
+		</action>
+		
+		<!-- Add Customer -->
+		<action name="addCustomer" class="com.frank.web.action.CustomerAction" method="addCustomer">
+			<result name="addCustomer" type="redirect">findAllCustomer</result>
+		</action>
 	</package>
 </struts>
