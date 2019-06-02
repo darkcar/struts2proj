@@ -21,5 +21,11 @@
 		<action name="addCustomer" class="com.frank.web.action.CustomerAction" method="addCustomer">
 			<result name="addCustomer" type="redirect">findAllCustomer</result>
 		</action>
+		
+		<!-- Delete Customer -->
+		<action name="deleteCustomer" class="com.frank.web.action.CustomerAction" method="deleteCustomer">
+			<result name="deleteCustomer" type="redirect">findAllCustomer</result>
+		</action>
+		
 	</package>
 </struts>

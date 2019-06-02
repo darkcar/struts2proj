@@ -66,5 +66,27 @@ public class CustomerServiceImpl implements ICustomerService{
 		}
 	}
 
+	@Override
+	public void deleteCustomer(Customer customer) {
+		Session session = null;
+		Transaction transaction = null;
+		try {
+			// Get Session
+			session = HibernateUtil.getSessionFactory().openSession();
+			// Open Transaction 
+			transaction = session.beginTransaction();
+			// Execute Operation
+			customerDao.deleteCustomer(customer);
+			// Commit Transaction
+			transaction.commit();
+		} catch (Exception e) {
+			// Roll back 
+			transaction.rollback();
+			throw new RuntimeException(e);
+		} finally {
+			session.close();
+		}
+	}
+
 	
 }

@@ -60,6 +60,20 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 		customerService.saveCustomer(customer);
 		return "addCustomer";
 	}
+	
+	/**
+	 * Delete Customer
+	 * @return
+	 */
+	public String deleteCustomer() {
+		customerService.deleteCustomer(customer);
+		return "deleteCustomer";
+	}
 
 	
 }
+
+
+
+
+

@@ -23,4 +23,6 @@ public interface ICustomerService {
 	 */
 	void saveCustomer(Customer customer);
 
+	void deleteCustomer(Customer customer);
+
 }

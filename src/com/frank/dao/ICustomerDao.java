@@ -22,4 +22,15 @@ public interface ICustomerDao {
 	 */
 	void saveCustomer(Customer customer);
 
+	/**
+	 * Delete Customer
+	 * @param customer
+	 */
+	void deleteCustomer(Customer customer);
+
+	/**
+	 * Find Customer by Id
+	 * @param custId
+	 */
+	Customer findCustomerById(long custId);
 }

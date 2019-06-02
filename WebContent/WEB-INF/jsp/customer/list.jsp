@@ -1,4 +1,12 @@
 <%@include file="/includes/header.jsp" %>
+<script>
+	function delOne(custId) {
+		var sure = window.confirm("Are you sure to delete?");
+		if(sure) {
+			window.location.href="${pageContext.request.contextPath}/customer/deleteCustomer?custId="+custId;
+		}
+	}
+</script>
 <%@include file="/includes/nav.jsp" %>
     <div id="content-wrapper">
       <div class="container-fluid">
@@ -29,6 +37,7 @@
                     <th>Address</th>
                     <th>Phone</th>
                     <th>Source</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tfoot>
@@ -39,6 +48,7 @@
 	                    <th>Address</th>
 	                    <th>Phone</th>
 	                    <th>Source</th>
+	                    <th>Action</th>
                   </tr>
                 </tfoot>
                 <tbody>
@@ -50,6 +60,9 @@
 	                    <td>${customer.custAddress }</td>
 	                    <td>${customer.custPhone }</td>
 	                    <td>${customer.custSource }</td>
+	                    <td><a href="#" class="btn btn-link btn-sm">Edit</a> 
+	                    	<a href="javascript:delOne(${customer.custId})" class="btn btn-danger btn-sm">Delete</a>
+	                    </td>
 	                  </tr>
                   	</c:forEach>
                 </tbody>
@@ -65,6 +78,5 @@
 
       </div>
       <!-- /.container-fluid -->
-
 
 <%@include file="/includes/footer.jsp" %>
