@@ -51,12 +51,6 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 	 * @return
 	 */
 	public String addCustomer() {
-		System.out.println(customer.getCustAddress());
-		System.out.println(customer.getCustIndustry());
-		System.out.println(customer.getCustLevel());
-		System.out.println(customer.getCustName());
-		System.out.println(customer.getCustPhone());
-		System.out.println(customer.getCustSource());
 		customerService.saveCustomer(customer);
 		return "addCustomer";
 	}

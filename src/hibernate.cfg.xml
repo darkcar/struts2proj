@@ -12,7 +12,7 @@
 		<property name="hibernate.connection.password">root123</property>
 		
 		<!-- Part 2: Hibernate Information (Optional) -->
-		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.show_sql">false</property>
 		<property name="hibernate.format_sql">true</property>
 		<!-- 
 			Hibernate Create table, after we configure the settings

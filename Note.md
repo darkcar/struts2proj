@@ -1,4 +1,4 @@
-# 中文笔记
+# 中文Struts2笔记
 
 ## 1. 三层架构：
 
@@ -561,3 +561,19 @@ Action先找局部结果，然后再找全局结果。 如何配置父包的继�
      ```
 
      因为已经使用了OGNL表达式，所以不需要实现ModelDriven接口。 
+
+5. 如果出现数据类型不匹配的封装如何解决呢？
+
+   比如在表单中，有一个日期的选项，struts2只能够接受一种格式的日期，如果用户输入的日期格式，不符合规定，就会出现这样的问题。
+
+   ```xml
+   <!-- Struts 的配置文件中，result有个input标签 -->
+   	<action name="request_uri" class="com.frank.web.action.DemoAction" method="demo2">
+   			<result name="success" type="dispatcher">/success.jsp</result>
+   			<result name="input">/user.jsp</result>
+   		</action>
+   ```
+
+   如何解决呢？使用Struts2提供的标签库。video 18.
+
+    
