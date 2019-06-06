@@ -1,4 +1,4 @@
-# 中文Struts2笔记
+# 中文Struts2笔记 - Part 1
 
 ## 1. 三层架构：
 
@@ -574,6 +574,29 @@ Action先找局部结果，然后再找全局结果。 如何配置父包的继�
    		</action>
    ```
 
-   如何解决呢？使用Struts2提供的标签库。video 18.
+   如何解决呢？使用Struts2提供的标签库，或者使用EL表达式来获取存储的数值。
 
-    
+   - <b>添加Input结果视图</b>
+   - <b>显示错误信息</b>
+   - <b>提交数据回显</b>
+   
+   ```jsp
+   #1 Method 1
+   <form action="${pageContext.request.contextPath }/request_uri" method="post">
+   	Name: <input type="text" name="username"/> <s:fielderror fieldName="username" /> <br>
+   	Age: <input type="text" name="age"/><s:fielderror fieldName="age" /> <br/>
+   	Birth: <input type="text" name="birth"/> <s:fielderror fieldName="birth" /><br/>
+   	Hobby: <input type="checkbox" name="hobby" value="swimming" /> Swimming
+   		<input type="checkbox" name="hobby" value="coding" /> Coding
+   		<input type="checkbox" name="hobby" value="eating"/> Eating<br>
+   		<input type="submit" value="Submit"/>
+   </form>
+   
+   #2 Method 2 - Use Struts2 Tag lib
+   <s:form action="demo2">
+   	<s:textfield name="username" label="Name"/>
+   	<s:textfield name="age" label="Age" />
+   	<s:textfield name="birth" label="Birth" />
+   	<s:submit value="Submit" />
+   </s:form>
+   ```
