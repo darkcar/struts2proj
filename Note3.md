@@ -86,6 +86,32 @@ invoke的返回值就是动作方法的返回值，比如说是success,error...
 
 ### 1.4 登录检查练习
 
+如何配置自定义拦截器？比如说，同时有三个动作方法，但是在执行三个动作方法之前，都需要进行登录的检验。但是如果有一个方法需要排除在检查登录方法之外，如何来实现呢？
+
+- 方法1: 
+
+  - 自定一个拦截器类，继承`AbstractInterceptor`.
+
+  ```java
+  public class CheckLoginInterceptor extends AbstractInterceptor {
+  	@Override
+  	public String intercept(ActionInvocation invocation) throws Exception {
+  		// check login 
+  		Object obj = ServletActionContext.getRequest().getSession().getAttribute("userInfo");
+  		if(obj == null) {
+  			return "login";
+  		}
+  		return invocation.invoke();
+  	}
+  }
+  ```
+
+  
+
+
+
+### 1.5 拦截器的类关系图
+
 
 
 ## 2. 注解配置
