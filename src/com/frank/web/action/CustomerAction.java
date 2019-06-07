@@ -1,10 +1,8 @@
 package com.frank.web.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.struts2.ServletActionContext;
 
 import com.frank.domain.Customer;
 import com.frank.service.ICustomerService;
@@ -24,6 +22,10 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 	
 	// Implement ModelDrive
 	private Customer customer = new Customer();
+	
+	// --- Add customers to value stack 
+	private List<Customer> customers = new ArrayList<Customer>();
+	
 	@Override
 	public Customer getModel() {
 		return customer;
@@ -39,10 +41,12 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 	}
 	
 	public String findAllCustomer() {
-		List<Customer> customers = customerService.findAllCustomer();
-		HttpServletRequest request = ServletActionContext.getRequest();
+//		List<Customer> customers = customerService.findAllCustomer();
+//		HttpServletRequest request = ServletActionContext.getRequest();
+//		
+//		request.setAttribute("customers", customers);
+		customers = customerService.findAllCustomer();
 		
-		request.setAttribute("customers", customers);
 		return "findAllCustomer";
 	}
 	
@@ -62,6 +66,14 @@ public class CustomerAction extends ActionSupport implements ModelDriven<Custome
 	public String deleteCustomer() {
 		customerService.deleteCustomer(customer);
 		return "deleteCustomer";
+	}
+	
+	// ------ Getters and Setter
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
 	}
 
 	

@@ -56,7 +56,7 @@
 
    ```jsp
   <s:radio list="{'Female', 'Male'}" name="gender" label="Gender" />
-   ```
+  ```
 
   创建Map集合：存储key:value对
 
@@ -400,4 +400,121 @@ public class ActionContext implements Serializable {
 }
 ```
 
-- ActionContext，每次请求都会创建新的对象，放在request对象中。video 12
+- ActionContext，每次请求都会创建新的对象，放在request对象中。
+
+  Struts中，有一个能够在页面中可以调试的标签，能够直接显示在各个域中存储的数据。`<s:debug />`
+
+  Here is how you can get the data from request 
+
+  ```java
+  public String demo1() {
+  		ActionContext context = ActionContext.getContext();
+  		context.put("contextMap", "Hello, Context Map");
+  		
+  		// Application 
+  		ServletContext applicationContext = ServletActionContext.getServletContext();
+  		applicationContext.setAttribute("applicationAttr", "Hello, application attr");
+  		
+  		Map<String, Object> applicationMap = context.getApplication();
+  		applicationMap.put("applicationMap", "hello, application map");
+  		return SUCCESS;
+  }
+  ```
+
+- 使用OGNL标签获取域中的数据：`#key`
+
+  ```jsp
+  <s:property value="#contextMap" /><br/>
+  <s:property value="#application.applicationAttr" /><br/>
+  ```
+
+## 4. Value Stack 值栈
+
+1. 使用List实现的stack数据结构。
+
+2. 实现往Stack中放入数据：
+
+   ```java
+   public String demo2() {
+   		ActionContext context = ActionContext.getContext();
+   		
+   		// Get Value Stack
+   		ValueStack valueStack = context.getValueStack();
+   		
+   		Student student = new Student("Frank, Wang", 29, "Male");
+   		// Push to stack
+   		valueStack.push(student);
+   	
+   		return SUCCESS;
+   }
+   ```
+
+   获取Student对象中的数据：
+
+   ```jsp
+   <s:property value="name" /> | <s:property value="age" /> | <s:property value="gender" />
+   ```
+
+   总结：
+
+   - <b>如何放入一个数据进入值栈呢？</b>
+
+   定一个类的成员，并且生成这个成员的get方法。
+
+   -  <b>如果有两个相同名称的值，如何获取对应的值呢？</b>
+
+   使用数组的下标进行访问 `<s:property value="[0].name" /> | <s:property vlaue="[1].name" />`
+
+   - 如果标签中只有一个`<s:property />` 获取的数据是栈顶对象的数据。
+
+   ## 5. EL表达式
+
+   搜素范围：
+
+   Page -> Request -> Session -> Applicaiton
+
+   OGNL 表达式：
+
+   `<s:property value="name" />`
+
+   这里的EL取值会发生改变：因为Struts2会在值栈中查找。
+
+   这里的Struts2 对EL表达式的改变：
+
+   Page -> request -> valueStack -> applicationMap -> session -> Application
+
+   在页面中，仍然使用EL表达式进行获取。
+
+   ## 6. OGNL符号总结
+
+   %: 把OGNL表达式转成普通字符串 %{" "}; 把字符串转成OGNL表达式%{ };
+
+   \#: 获取ContextMap中的数据。#key; 在页面中可以创建Map集合 #{ }
+
+   $: EL 表达式使用； 可以在struts2 的配置中使用OGNL表达式，配置可以是xml文件，也可以是注解。 
+
+   ## 7. 使用OGNL表达式在CRM项目中应用
+
+   在Action类中，定义一个`List<Customer>` 的成员，然后生成get和set方法。
+
+   使用struts2中的迭代标签：<s:iterator />
+
+   ```jsp
+   <s:iterator value="customers">
+     <tr>
+     <td>${custName }</td>
+     <td>${custIndustry }</td>
+     <td>${custLevel }</td>
+     <td>${custAddress }</td>
+     <td>${custPhone }</td>
+     <td>${custSource }</td>
+     <td><a href="#" class="btn btn-link btn-sm">Edit</a> 
+     <a href="javascript:delOne(${custId})" class="btn btn-danger btn-sm">Delete</a>
+     </td>
+     </tr>
+   </s:iterator>
+   ```
+
+   
+
+​	

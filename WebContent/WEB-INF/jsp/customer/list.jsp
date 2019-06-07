@@ -52,7 +52,7 @@
                   </tr>
                 </tfoot>
                 <tbody>
-                  <c:forEach items="${customers }" var="customer">
+                  <%-- <c:forEach items="${customers }" var="customer">
 	                  <tr>
 	                    <td>${customer.custName }</td>
 	                    <td>${customer.custIndustry }</td>
@@ -64,7 +64,20 @@
 	                    	<a href="javascript:delOne(${customer.custId})" class="btn btn-danger btn-sm">Delete</a>
 	                    </td>
 	                  </tr>
-                  	</c:forEach>
+                  	</c:forEach> --%>
+                  	<s:iterator value="customers">
+                  	<tr>
+	                    <td>${custName }</td>
+	                    <td>${custIndustry }</td>
+	                    <td>${custLevel }</td>
+	                    <td>${custAddress }</td>
+	                    <td>${custPhone }</td>
+	                    <td>${custSource }</td>
+	                    <td><a href="#" class="btn btn-link btn-sm">Edit</a> 
+	                    	<a href="javascript:delOne(${custId})" class="btn btn-danger btn-sm">Delete</a>
+	                    </td>
+	                  </tr>
+	                  </s:iterator>
                 </tbody>
               </table>
             </div>
